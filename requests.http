@@ -1,0 +1,79 @@
+### ใช้กับ VS Code extension "REST Client" (humao.rest-client) — กด "Send Request" เหนือแต่ละอัน
+### ถ้า deploy แล้ว เปลี่ยน @host เป็น URL ของ Vercel เช่น https://your-app.vercel.app
+@host = http://localhost:3000
+@token = iot-lab-2026
+
+### CREATE — เพิ่มนักศึกษา
+POST {{host}}/api/v1/students
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "สมชาย",
+  "lastName": "ใจดี",
+  "studentId": "66070001",
+  "birthDate": "2004-05-12",
+  "gender": "male"
+}
+
+### CREATE — อีกคน
+POST {{host}}/api/v1/students
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "สมหญิง",
+  "lastName": "รักเรียน",
+  "studentId": "66070002",
+  "birthDate": "2005-01-30",
+  "gender": "female"
+}
+
+### READ — ดูทั้งหมด
+GET {{host}}/api/v1/students
+Authorization: Bearer {{token}}
+
+### READ — ดูคนเดียว
+GET {{host}}/api/v1/students/1
+Authorization: Bearer {{token}}
+
+### UPDATE — แก้เฉพาะฟิลด์ที่ส่งไป
+PATCH {{host}}/api/v1/students/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "lastName": "ใจงาม"
+}
+
+### DELETE — ลบ
+DELETE {{host}}/api/v1/students/2
+Authorization: Bearer {{token}}
+
+### ทดสอบ error: รหัสซ้ำ → 409
+POST {{host}}/api/v1/students
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "ซ้ำ",
+  "lastName": "ซ้ำ",
+  "studentId": "66070001",
+  "birthDate": "2004-01-01",
+  "gender": "other"
+}
+
+### ทดสอบ error: ข้อมูลผิดรูปแบบ → 400
+POST {{host}}/api/v1/students
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "studentId": "66070003",
+  "birthDate": "12/05/2004",
+  "gender": "unknown"
+}
+
+### ทดสอบ error: ไม่ใส่ token → 401
+GET {{host}}/api/v1/students
